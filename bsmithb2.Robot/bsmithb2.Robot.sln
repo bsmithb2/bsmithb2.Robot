@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bsmithb2.Robot.Tests", "..\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1713E7D-BB2F-4058-87F3-EB9C2F0E1ECB}"
 	ProjectSection(SolutionItems) = preProject
-		travis.yml = travis.yml
+		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
 Global
