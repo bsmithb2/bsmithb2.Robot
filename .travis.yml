@@ -1,7 +1,7 @@
 language: csharp
-solution: bsmithb2.Robot/bsmithb2.Robot.sln
-install:
-  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+dist: trusty
+sudo: required
+mono: none
+dotnet: 1.0.0-preview2-003121
 script:
-  - dotnet build
-  
+  - ./build.sh --quiet verify
