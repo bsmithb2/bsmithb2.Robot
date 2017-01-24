@@ -9,6 +9,7 @@ namespace bsmithb2.Robot.Tests
         [Test]
         public void TestMethod1()
         {
+            Assert.Inconclusive("This is a test");
         }
     }
 }
