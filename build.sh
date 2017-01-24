@@ -16,7 +16,7 @@ dotnet build **/project.json
 # Ideally we would use the 'dotnet test' command to test netcoreapp and net451 so restrict for now 
 # but this currently doesn't work due to https://github.com/dotnet/cli/issues/3073 so restrict to netcoreapp
 
-#dotnet test ./bsmithb2.Robot.Tests -c Release -f netcoreapp1.0
+dotnet test ./bsmithb2.Robot.Tests 
 
 # Instead, run directly with mono for the full .net version 
 #dotnet build ./bsmithb2.Robot.Tests -c Release -f net451
