@@ -1,2 +1,2 @@
 language: csharp
-solution: bsmithb2.Robot.sln
+solution: bsmithb2.Robot/bsmithb2.Robot.sln
