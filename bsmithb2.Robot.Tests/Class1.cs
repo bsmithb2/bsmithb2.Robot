@@ -12,6 +12,7 @@ namespace bsmithb2.Robot.Tests
         [Test]
         public void Test()
         {
+            Assert.True(true);
         }
     }
 }

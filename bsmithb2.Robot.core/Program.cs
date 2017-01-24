@@ -9,6 +9,7 @@ namespace bsmithb2.Robot.core
     {
         public static void Main(string[] args)
         {
+
         }
     }
 }
