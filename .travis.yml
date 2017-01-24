@@ -4,5 +4,5 @@ install:
   - nuget restore bsmithb2.Robot/bsmithb2.Robot.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release bsmithb2.Robot/bsmithb2.Robot.sln
+  - xbuild /p:Configuration=Release bsmithb2.Robot.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./bsmithb2.Robot.Tests/bin/Release/bsmithb2.Robot.Tests.dll
