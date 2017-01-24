@@ -4,7 +4,8 @@
   "dependencies": {
     "NUnit": "3.5.0",
     "dotnet-test-nunit": "3.4.0-beta-3",
-    "bsmithb2.Robot.core": "1.0.0-*"
+    "bsmithb2.Robot.core": "1.0.0-*",
+    "Autofac": "4.3.0"
   },
 
   "testRunner": "nunit",

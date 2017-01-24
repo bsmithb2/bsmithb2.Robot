@@ -5,6 +5,7 @@
   },
 
   "dependencies": {
+    "Autofac": "4.3.0",
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"
