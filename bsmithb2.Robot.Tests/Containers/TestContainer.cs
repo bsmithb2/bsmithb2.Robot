@@ -10,11 +10,17 @@ namespace bsmithb2.Robot.Tests.Containers
 {
     internal class TestContainer
     {
+        internal IApplication Application
+        {
+            get;set;
+        }
+
         internal IContainer Configure()
         {
             var builder = new ContainerBuilder();
-            var sub = Substitute.For<IApplication>();
-            builder.RegisterInstance(sub).As<IApplication>();
+            Application = Substitute.For<IApplication>();
+            
+            builder.RegisterInstance(Application).As<IApplication>();
             
             return builder.Build();
         }

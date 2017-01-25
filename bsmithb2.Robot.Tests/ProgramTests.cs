@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using bsmithb2.Robot.core;
 using bsmithb2.Robot.Tests.Containers;
+using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,15 @@ namespace bsmithb2.Robot.Tests
         [Test]
         public void Program_Should_Call_TestContainers_IApplication()
         {
-            Program.Container = new TestContainer().Configure();
+            //Arrange
+            var testContainer = new TestContainer();
+            Program.Container = testContainer.Configure();
+
+            //Act
             Program.Main(null);
 
+            //Assert
+            testContainer.Application.Received(1).Run();
         }
     }
 }
