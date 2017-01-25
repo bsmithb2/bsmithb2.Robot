@@ -1,8 +1,6 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using NSubstitute;
+using NUnit.Framework;
+using Microsoft.Extensions.Logging;
 
 namespace bsmithb2.Robot.Tests
 {
@@ -12,7 +10,20 @@ namespace bsmithb2.Robot.Tests
         [Test]
         public void Constructor_ShouldAccept_ILogger()
         {
+            var logger = Substitute.For<ILogger>();
+            var application = new Application(logger);
+        }
+
+        [Test]
+        public void Constructor_ShouldLogItsInstantiation()
+        {
+            var logger = Substitute.For<ILogger>();
+            var application = new Application(logger);
+
             
+
+            logger.ReceivedWithAnyArgs(1).LogDebug("testmessage");
+                
         }
     }
 }

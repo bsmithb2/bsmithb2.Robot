@@ -4,6 +4,10 @@
   "dependencies": {
     "NUnit": "3.5.0",
     "NSubstitute": "2.0.1-rc",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0",
+    "Microsoft.Extensions.Logging.Console": "1.0.0",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Logging": "1.0.0",
     "dotnet-test-nunit": "3.4.0-beta-3",
     "bsmithb2.Robot.core": "1.0.0-*",
     "Autofac": "4.3.0"
