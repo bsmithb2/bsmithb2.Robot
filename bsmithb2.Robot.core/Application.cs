@@ -21,7 +21,8 @@ namespace bsmithb2.Robot.core
         public void Run()
         {
             _logger.LogDebug("Beginning Run");
-            var firstInstruction = _consoleReader.ReadLine();
+            var instruction = _consoleReader.ReadLine();
+            _commandParser.ParseCommand(instruction);
         }
     }
 }

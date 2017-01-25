@@ -38,7 +38,8 @@ namespace bsmithb2.Robot.Tests
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, consoleReader, null);
+            var commandParser = Substitute.For<ICommandParser>();
+            var application = new Application(logger, consoleReader, commandParser);
             logger.ClearReceivedCalls();
             application.Run();
 
@@ -50,7 +51,8 @@ namespace bsmithb2.Robot.Tests
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, consoleReader, null);
+            var commandParser = Substitute.For<ICommandParser>();
+            var application = new Application(logger, consoleReader, commandParser);
 
             application.Run();
 
@@ -68,6 +70,21 @@ namespace bsmithb2.Robot.Tests
             application.Run();
 
             consoleReader.Received(1).ReadLine();
+        }
+
+        [Test]
+        public void Run_ShouldPassInputToCommandParser()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("TEST");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+            
+            commandParser.Received(1).ParseCommand("TEST");
+
         }
     }
 }
