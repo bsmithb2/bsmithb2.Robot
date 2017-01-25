@@ -1,12 +1,7 @@
-﻿using Autofac;
-using bsmithb2.Robot.core;
+﻿using bsmithb2.Robot.core;
 using bsmithb2.Robot.Tests.Containers;
 using NSubstitute;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace bsmithb2.Robot.Tests
 {

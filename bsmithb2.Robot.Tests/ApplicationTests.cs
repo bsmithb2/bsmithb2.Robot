@@ -20,10 +20,7 @@ namespace bsmithb2.Robot.Tests
             var logger = Substitute.For<ILogger>();
             var application = new Application(logger);
 
-            
-
             logger.ReceivedWithAnyArgs(1).LogDebug("testmessage");
-                
         }
     }
 }
