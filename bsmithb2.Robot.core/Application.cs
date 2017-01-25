@@ -1,5 +1,4 @@
-﻿using System;
-using bsmithb2.Robot.core.Interfaces;
+﻿using bsmithb2.Robot.core.Interfaces;
 
 namespace bsmithb2.Robot.core
 {
