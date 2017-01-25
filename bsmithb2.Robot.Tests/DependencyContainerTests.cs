@@ -34,5 +34,18 @@ namespace bsmithb2.Robot.Tests
                 Assert.IsInstanceOf<ILogger<Program>>(logger);
             }
         }
+
+        [Test]
+        public void Configure_ShouldResolveConsoleReader()
+        {
+            DependencyContainer dependencyContainer = new DependencyContainer();
+            var container = dependencyContainer.Configure();
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var reader = scope.Resolve<IConsoleReader>();
+                Assert.IsNotNull(reader);
+                Assert.IsInstanceOf<ConsoleReader>(reader);
+            }
+        }
     }
 }

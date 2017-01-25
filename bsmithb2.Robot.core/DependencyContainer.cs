@@ -15,6 +15,8 @@ namespace bsmithb2.Robot.core
                 .AddDebug();
             ILogger logger = loggerFactory.CreateLogger<Program>();
             builder.RegisterInstance<ILogger>(logger);
+
+            builder.RegisterType<ConsoleReader>().As<IConsoleReader>();
             return builder.Build();
         }
     }

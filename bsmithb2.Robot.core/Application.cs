@@ -5,11 +5,13 @@ namespace bsmithb2.Robot.core
 {
     public class Application : IApplication
     {
-        private ILogger logger;
+        private ILogger _logger;
+        private IConsoleReader _consoleReader;
 
-        public Application(ILogger logger)
+        public Application(ILogger logger, IConsoleReader consoleReader)
         {
-            this.logger = logger;
+            _logger = logger;
+            _consoleReader = consoleReader;
 
             logger.LogDebug("Started application");
         }
