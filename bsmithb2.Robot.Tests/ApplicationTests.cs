@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using Microsoft.Extensions.Logging;
+using bsmithb2.Robot.core;
 
 namespace bsmithb2.Robot.Tests
 {
