@@ -49,6 +49,22 @@ namespace bsmithb2.Robot.core
 
                 return new PlaceAction(firstArgValue, secondArgValue, positionArg);
             }
+            else if(commandText == "MOVE")
+            {
+                return new MoveAction();
+            }
+            else if (commandText == "LEFT")
+            {
+                return new LeftAction();
+            }
+            else if (commandText == "RIGHT")
+            {
+                return new RightAction();
+            }
+            else if (commandText == "REPORT")
+            {
+                return new ReportAction();
+            }
             else
             {
                 return null;

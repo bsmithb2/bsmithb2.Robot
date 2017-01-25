@@ -164,5 +164,37 @@ namespace bsmithb2.Robot.Tests
             Assert.AreEqual(4, ((PlaceAction)command).PositionY);
             Assert.AreEqual(Direction.WEST, ((PlaceAction)command).Direction);
         }
+
+        [Test]
+        public void MoveCommand_ReturnsMoveAction()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("MOVE");
+            Assert.IsAssignableFrom<MoveAction>(command);
+        }
+
+        [Test]
+        public void LeftCommand_ReturnsLeftAction()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("LEFT");
+            Assert.IsAssignableFrom<LeftAction>(command);
+        }
+
+        [Test]
+        public void RightCommand_ReturnsRightAction()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("RIGHT");
+            Assert.IsAssignableFrom<RightAction>(command);
+        }
+
+        [Test]
+        public void ReportCommand_ReturnsReportAction()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("REPORT");
+            Assert.IsAssignableFrom<ReportAction>(command);
+        }
     }
 }
