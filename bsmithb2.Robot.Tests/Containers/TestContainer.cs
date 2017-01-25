@@ -20,6 +20,11 @@ namespace bsmithb2.Robot.Tests.Containers
             get; set;
         }
 
+        internal ICommandParser CommandParser
+        {
+            get; set;
+        }
+
         internal IContainer Configure()
         {
             var builder = new ContainerBuilder();
@@ -28,6 +33,9 @@ namespace bsmithb2.Robot.Tests.Containers
 
             ConsoleReader = Substitute.For<IConsoleReader>();
             builder.RegisterInstance(ConsoleReader).As<IConsoleReader>();
+
+            CommandParser = Substitute.For<ICommandParser>();
+            builder.RegisterInstance(CommandParser).As<ICommandParser>();
 
             return builder.Build();
         }

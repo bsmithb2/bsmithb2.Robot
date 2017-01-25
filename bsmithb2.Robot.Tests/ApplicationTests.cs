@@ -13,16 +13,16 @@ namespace bsmithb2.Robot.Tests
         public void Constructor_ShouldAccept_ILogger()
         {
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, null);
+            var application = new Application(logger, null, null);
         }
 
         [Test]
         public void Constructor_ShouldLogItsInstantiation()
         {
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, null);
+            var application = new Application(logger, null, null);
 
-            logger.ReceivedWithAnyArgs(1).LogDebug("testmessage");
+            logger.ReceivedWithAnyArgs(1).LogDebug("");
         }
 
         [Test]
@@ -30,7 +30,44 @@ namespace bsmithb2.Robot.Tests
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, consoleReader);
+            var application = new Application(logger, consoleReader, null);
+        }
+
+        [Test]
+        public void Run_ShouldNoteStartInLog()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            var logger = Substitute.For<ILogger>();
+            var application = new Application(logger, consoleReader, null);
+            logger.ClearReceivedCalls();
+            application.Run();
+
+            logger.ReceivedWithAnyArgs(1).LogDebug("");
+        }
+
+        [Test]
+        public void Run_ShouldAskConsoleReaderForInput()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            var logger = Substitute.For<ILogger>();
+            var application = new Application(logger, consoleReader, null);
+
+            application.Run();
+
+            consoleReader.Received(1).ReadLine();
+        }
+
+        [Test]
+        public void Constructor_ShouldAcceptCommandParser()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            consoleReader.Received(1).ReadLine();
         }
     }
 }

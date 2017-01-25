@@ -9,14 +9,17 @@ namespace bsmithb2.Robot.core
         public IContainer Configure()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<Application>().As<IApplication>();
+            
             ILoggerFactory loggerFactory = new LoggerFactory()    
                 .AddConsole()
                 .AddDebug();
             ILogger logger = loggerFactory.CreateLogger<Program>();
-            builder.RegisterInstance<ILogger>(logger);
+            builder.RegisterInstance(logger);
 
             builder.RegisterType<ConsoleReader>().As<IConsoleReader>();
+
+            builder.RegisterType<CommandParser>().As<ICommandParser>();
+            builder.RegisterType<Application>().As<IApplication>();
             return builder.Build();
         }
     }
