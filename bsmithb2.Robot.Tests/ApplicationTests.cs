@@ -84,7 +84,6 @@ namespace bsmithb2.Robot.Tests
             application.Run();
             
             commandParser.Received(1).ParseCommand("TEST");
-
         }
     }
 }
