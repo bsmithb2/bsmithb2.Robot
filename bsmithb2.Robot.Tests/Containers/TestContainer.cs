@@ -15,7 +15,7 @@ namespace bsmithb2.Robot.Tests.Containers
             var builder = new ContainerBuilder();
             var sub = Substitute.For<IApplication>();
             builder.RegisterInstance(sub).As<IApplication>();
-            //builder.RegisterType<>().As<IApplication>();
+            
             return builder.Build();
         }
     }
