@@ -3,7 +3,7 @@ using bsmithb2.Robot.core.Interfaces;
 
 namespace bsmithb2.Robot.core
 {
-    internal class Application : IApplication
+    public class Application : IApplication
     {
         public void Run()
         {
