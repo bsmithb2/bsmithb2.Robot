@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace bsmithb2.Robot.core.Interfaces
 {
-    public interface ICommandParser
+    public class IAction
     {
-        IAction ParseCommand(string commandText);
+
     }
 }
