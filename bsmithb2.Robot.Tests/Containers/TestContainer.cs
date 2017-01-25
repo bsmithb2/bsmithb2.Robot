@@ -15,13 +15,20 @@ namespace bsmithb2.Robot.Tests.Containers
             get;set;
         }
 
+        internal IConsoleReader ConsoleReader
+        {
+            get; set;
+        }
+
         internal IContainer Configure()
         {
             var builder = new ContainerBuilder();
             Application = Substitute.For<IApplication>();
-            
             builder.RegisterInstance(Application).As<IApplication>();
-            
+
+            ConsoleReader = Substitute.For<IConsoleReader>();
+            builder.RegisterInstance(ConsoleReader).As<IConsoleReader>();
+
             return builder.Build();
         }
     }
