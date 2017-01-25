@@ -7,7 +7,7 @@ namespace bsmithb2.Robot.core
     {
         public void Run()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
