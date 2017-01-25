@@ -20,12 +20,34 @@ namespace bsmithb2.Robot.core
                 {
                     return null;
                 }
-
-                if(firstArgValue < 0 || firstArgValue > 4)
+                
+                if (firstArgValue < 0 || firstArgValue > 4)
                 {
                     return null;
                 }
-                return new PlaceAction();
+
+                var secondArg = args[1];
+                int secondArgValue;
+                if (!int.TryParse(secondArg, out secondArgValue))
+                {
+                    return null;
+                }
+
+                if (secondArgValue < 0 || secondArgValue > 4)
+                {
+                    return null;
+                }
+
+                var positionArg = args[2];
+                if(positionArg != "NORTH" 
+                    && positionArg != "SOUTH"
+                    && positionArg != "EAST"
+                    && positionArg != "WEST")
+                {
+                    return null;
+                }
+
+                return new PlaceAction(firstArgValue, secondArgValue, positionArg);
             }
             else
             {

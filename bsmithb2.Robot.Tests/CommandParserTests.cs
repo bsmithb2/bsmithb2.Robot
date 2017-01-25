@@ -11,8 +11,11 @@ namespace bsmithb2.Robot.Tests
         public void ParseCommand_ShouldParsePlaceCommand()
         {
             var commandParser = new CommandParser();
-            var command = commandParser.ParseCommand("PLACE 1,Y,F");
+            var command = commandParser.ParseCommand("PLACE 1,2,SOUTH");
             Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(1, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.SOUTH, ((PlaceAction)command).Direction);
         }
 
         [Test]
@@ -53,6 +56,9 @@ namespace bsmithb2.Robot.Tests
             var commandParser = new CommandParser();
             var command = commandParser.ParseCommand("PLACE 1,2,NORTH");
             Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(1, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.NORTH, ((PlaceAction)command).Direction);
         }
 
         [Test]
@@ -77,6 +83,86 @@ namespace bsmithb2.Robot.Tests
             var commandParser = new CommandParser();
             var command = commandParser.ParseCommand("PLACE 5,2,NORTH");
             Assert.IsNull(command);
+        }
+
+        [Test]
+        public void ParseCommand_SecondParameter_Between0And4()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 1,2,NORTH");
+            Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(1, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.NORTH, ((PlaceAction)command).Direction);
+        }
+
+        [Test]
+        public void ParseCommand_SecondParameter_NotANumber()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 1,X,NORTH");
+            Assert.IsNull(command);
+        }
+
+        [Test]
+        public void ParseCommand_SecondParameter_NegativeNumber()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 1,-1,NORTH");
+            Assert.IsNull(command);
+        }
+
+        [Test]
+        public void ParseCommand_SecondParameter_PositiveNumber_Five()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 2,5,NORTH");
+            Assert.IsNull(command);
+        }
+
+        [Test]
+        public void ParseCommand_DirectionParameter_NORTH()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 2,4,NORTH");
+            Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(4, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.NORTH, ((PlaceAction)command).Direction);
+        }
+
+        [Test]
+        public void ParseCommand_DirectionParameter_SOUTH()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 2,4,SOUTH");
+            Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(4, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.SOUTH, ((PlaceAction)command).Direction);
+        }
+
+        [Test]
+        public void ParseCommand_DirectionParameter_EAST()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 2,4,EAST");
+            Assert.IsAssignableFrom<PlaceAction>(command);
+            Assert.AreEqual(2, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(4, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.EAST, ((PlaceAction)command).Direction);
+        }
+
+        [Test]
+        public void ParseCommand_DirectionParameter_WEST()
+        {
+            var commandParser = new CommandParser();
+            var command = commandParser.ParseCommand("PLACE 2,4,WEST");
+            Assert.IsAssignableFrom<PlaceAction>(command);
+
+            Assert.AreEqual(2, ((PlaceAction)command).PositionX);
+            Assert.AreEqual(4, ((PlaceAction)command).PositionY);
+            Assert.AreEqual(Direction.WEST, ((PlaceAction)command).Direction);
         }
     }
 }
