@@ -122,5 +122,59 @@ namespace bsmithb2.Robot.Tests
             Assert.IsNotNull(application.Actions);
             Assert.AreEqual(0, application.Actions.Count);
         }
+
+        [Test]
+        public void Run_ShouldNotRecordInputOfLEFTCommandToList_IfFirst()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("LEFT");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("LEFT").Returns(new LeftAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("LEFT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(0, application.Actions.Count);
+        }
+
+        [Test]
+        public void Run_ShouldNotRecordInputOfRIGHTCommandToList_IfFirst()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("RIGHT");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("RIGHT").Returns(new RightAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("RIGHT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(0, application.Actions.Count);
+        }
+
+        [Test]
+        public void Run_ShouldNotRecordInputOfREPORTCommandToList_IfFirst()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("REPORT");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("REPORT").Returns(new ReportAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("REPORT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(0, application.Actions.Count);
+        }
     }
 }

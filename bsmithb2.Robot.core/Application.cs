@@ -29,12 +29,13 @@ namespace bsmithb2.Robot.core
         public void Run()
         {
             _logger.LogDebug("Beginning Run");
+            Actions = new List<IAction>();
             var instruction = _consoleReader.ReadLine();
 
             var action = _commandParser.ParseCommand(instruction);
             if(action.GetType() == typeof(PlaceAction))
             {
-                Actions = new List<IAction>();
+                
                 Actions.Add(action);
             }
 
