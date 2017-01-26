@@ -236,5 +236,108 @@ namespace bsmithb2.Robot.Tests
             Assert.AreSame(expectedAction1, application.Actions[0]);
             Assert.AreSame(expectedAction2, application.Actions[1]);
         }
+
+        [Test]
+        public void Run_ShouldRecordInputOfRIGHTCommandToList_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "RIGHT", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var expectedAction1 = new PlaceAction(1, 1, "WEST");
+            var expectedAction2 = new RightAction();
+
+            commandParser.ParseCommand("PLACE").Returns(expectedAction1);
+            commandParser.ParseCommand("RIGHT").Returns(expectedAction2);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("PLACE");
+            commandParser.Received(1).ParseCommand("RIGHT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(2, application.Actions.Count);
+            Assert.AreSame(expectedAction1, application.Actions[0]);
+            Assert.AreSame(expectedAction2, application.Actions[1]);
+        }
+
+        [Test]
+        public void Run_ShouldRecordInputOfLEFTCommandToList_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "LEFT", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var expectedAction1 = new PlaceAction(1, 1, "WEST");
+            var expectedAction2 = new RightAction();
+
+            commandParser.ParseCommand("PLACE").Returns(expectedAction1);
+            commandParser.ParseCommand("LEFT").Returns(expectedAction2);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("PLACE");
+            commandParser.Received(1).ParseCommand("LEFT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(2, application.Actions.Count);
+            Assert.AreSame(expectedAction1, application.Actions[0]);
+            Assert.AreSame(expectedAction2, application.Actions[1]);
+        }
+
+        [Test]
+        public void Run_ShouldRecordInputOfREPORTCommandToList_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "REPORT", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var expectedAction1 = new PlaceAction(1, 1, "WEST");
+            var expectedAction2 = new RightAction();
+
+            commandParser.ParseCommand("PLACE").Returns(expectedAction1);
+            commandParser.ParseCommand("REPORT").Returns(expectedAction2);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("PLACE");
+            commandParser.Received(1).ParseCommand("REPORT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(2, application.Actions.Count);
+            Assert.AreSame(expectedAction1, application.Actions[0]);
+            Assert.AreSame(expectedAction2, application.Actions[1]);
+        }
+
+        [Test]
+        public void Run_ShouldNotRunReport_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("REPORT", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var expectedAction1 = new ReportAction();
+
+            commandParser.ParseCommand("REPORT").Returns(expectedAction1);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("REPORT");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(0, application.Actions.Count);
+        }
     }
 }
