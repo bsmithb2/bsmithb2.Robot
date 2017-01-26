@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Microsoft.Extensions.Logging;
 using bsmithb2.Robot.core;
 using bsmithb2.Robot.core.Interfaces;
+using bsmithb2.Robot.core.Actions;
 
 namespace bsmithb2.Robot.Tests
 {
@@ -84,6 +85,42 @@ namespace bsmithb2.Robot.Tests
             application.Run();
             
             commandParser.Received(1).ParseCommand("TEST");
+        }
+
+        [Test]
+        public void Run_ShouldRecordInputOfPLACECommandToList()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("PARSE");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("PARSE").Returns(new PlaceAction(0,0,"NORTH"));
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("PARSE");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(1, application.Actions.Count);
+        }
+
+        [Test]
+        public void Run_ShouldNotRecordInputOfMOVECommandToList_IfFirst()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().ReturnsForAnyArgs("MOVE");
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("MOVE").Returns(new MoveAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("MOVE");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(0, application.Actions.Count);
         }
     }
 }
