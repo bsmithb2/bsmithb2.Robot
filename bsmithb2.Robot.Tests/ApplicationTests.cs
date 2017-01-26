@@ -10,6 +10,12 @@ namespace bsmithb2.Robot.Tests
     [TestFixture]
     public class ApplicationTests
     {
+        [SetUp]
+        public void BeforeTest()
+        {
+            countOfCalls = 0;
+        }
+
         [Test]
         public void Constructor_ShouldAccept_ILogger()
         {
@@ -40,6 +46,7 @@ namespace bsmithb2.Robot.Tests
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("").ReturnsForAnyArgs(new ExitAction());
             var application = new Application(logger, consoleReader, commandParser);
             logger.ClearReceivedCalls();
             application.Run();
@@ -53,19 +60,7 @@ namespace bsmithb2.Robot.Tests
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
-            var application = new Application(logger, consoleReader, commandParser);
-
-            application.Run();
-
-            consoleReader.Received(1).ReadLine();
-        }
-
-        [Test]
-        public void Constructor_ShouldAcceptCommandParser()
-        {
-            var consoleReader = Substitute.For<IConsoleReader>();
-            var logger = Substitute.For<ILogger>();
-            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("").ReturnsForAnyArgs(new ExitAction());
             var application = new Application(logger, consoleReader, commandParser);
 
             application.Run();
@@ -77,9 +72,12 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldPassInputToCommandParser()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("TEST");
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("TEST", "EXIT"));
+
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
             var application = new Application(logger, consoleReader, commandParser);
 
             application.Run();
@@ -91,16 +89,17 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldRecordInputOfPLACECommandToList()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("PARSE");
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
-            commandParser.ParseCommand("PARSE").Returns(new PlaceAction(0,0,"NORTH"));
+            commandParser.ParseCommand("PLACE").Returns(new PlaceAction(0,0,"NORTH"));
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser);
 
             application.Run();
 
-            commandParser.Received(1).ParseCommand("PARSE");
+            commandParser.Received(1).ParseCommand("PLACE");
             Assert.IsNotNull(application.Actions);
             Assert.AreEqual(1, application.Actions.Count);
         }
@@ -109,10 +108,11 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldNotRecordInputOfMOVECommandToList_IfFirst()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("MOVE");
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("MOVE", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             commandParser.ParseCommand("MOVE").Returns(new MoveAction());
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser);
 
@@ -127,10 +127,11 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldNotRecordInputOfLEFTCommandToList_IfFirst()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("LEFT");
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("LEFT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             commandParser.ParseCommand("LEFT").Returns(new LeftAction());
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser);
 
@@ -145,10 +146,11 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldNotRecordInputOfRIGHTCommandToList_IfFirst()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("RIGHT");
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("RIGHT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             commandParser.ParseCommand("RIGHT").Returns(new RightAction());
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser);
 
@@ -159,14 +161,24 @@ namespace bsmithb2.Robot.Tests
             Assert.AreEqual(0, application.Actions.Count);
         }
 
+        private int countOfCalls = 0;
+        private string BuildListOfItemsInOrder(params string[] items)
+        {
+            var item = items[countOfCalls];
+            countOfCalls++;
+            return item;
+        }
+
         [Test]
         public void Run_ShouldNotRecordInputOfREPORTCommandToList_IfFirst()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
-            consoleReader.ReadLine().ReturnsForAnyArgs("REPORT");
+            countOfCalls = 0;
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("REPORT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             commandParser.ParseCommand("REPORT").Returns(new ReportAction());
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser);
 
@@ -175,6 +187,54 @@ namespace bsmithb2.Robot.Tests
             commandParser.Received(1).ParseCommand("REPORT");
             Assert.IsNotNull(application.Actions);
             Assert.AreEqual(0, application.Actions.Count);
+        }
+
+
+        [Test]
+        public void Run_ShouldResetListOnInputOfPLACECommandToList_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "PLACE", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            commandParser.ParseCommand("PLACE").Returns(new PlaceAction(1,1,"WEST"));
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(2).ParseCommand("PLACE");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(1, application.Actions.Count);
+        }
+
+        [Test]
+        public void Run_ShouldRecordInputOfMOVECommandToList_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "MOVE", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var expectedAction1 = new PlaceAction(1, 1, "WEST");
+            var expectedAction2 = new MoveAction();
+
+            commandParser.ParseCommand("PLACE").Returns(expectedAction1);
+            commandParser.ParseCommand("MOVE").Returns(expectedAction2);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser);
+
+            application.Run();
+
+            commandParser.Received(1).ParseCommand("PLACE");
+            commandParser.Received(1).ParseCommand("MOVE");
+            Assert.IsNotNull(application.Actions);
+            Assert.AreEqual(2, application.Actions.Count);
+            Assert.AreSame(expectedAction1, application.Actions[0]);
+            Assert.AreSame(expectedAction2, application.Actions[1]);
         }
     }
 }

@@ -30,17 +30,26 @@ namespace bsmithb2.Robot.core
         {
             _logger.LogDebug("Beginning Run");
             Actions = new List<IAction>();
-            var instruction = _consoleReader.ReadLine();
-
-            var action = _commandParser.ParseCommand(instruction);
-            if(action.GetType() == typeof(PlaceAction))
+            while (true)
             {
-                
-                Actions.Add(action);
+                var instruction = _consoleReader.ReadLine();
+                var action = _commandParser.ParseCommand(instruction);
+                if (action.GetType() == typeof(ExitAction))
+                {
+                    break;
+                }
+                if (action.GetType() == typeof(PlaceAction))
+                {
+                    Actions.Clear();
+                    Actions.Add(action);
+                }
+                else if (Actions.Count > 0)
+                {
+                    Actions.Add(action);
+                }
             }
 
-            //TODO - If PLACE action then clear list of actions and place first
-            //TODO - If Report action, then apply actions in order and report result
+             //TODO - If Report action, then apply actions in order and report result
             //TODO - Exit?
             //TODO - A robot that is not on the table can choose to ignore the MOVE, LEFT, RIGHT and REPORT commands.
             //     ----- This means that once you perform a move then you need to determine if we're off the table
