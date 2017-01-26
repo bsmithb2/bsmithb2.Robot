@@ -53,7 +53,6 @@ namespace bsmithb2.Robot.core
                         _reportGenerator.RunReport(Actions);
                     }
                 }
-                
             }
         }
     }
