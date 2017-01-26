@@ -10,6 +10,7 @@ namespace bsmithb2.Robot.core
         private ILogger _logger;
         private IConsoleReader _consoleReader;
         private ICommandParser _commandParser;
+        private IReportGenerator _reportGenerator;
 
         public List<IAction> Actions
         {
@@ -17,11 +18,12 @@ namespace bsmithb2.Robot.core
             private set;
         }
 
-        public Application(ILogger logger, IConsoleReader consoleReader, ICommandParser commandParser)
+        public Application(ILogger logger, IConsoleReader consoleReader, ICommandParser commandParser, IReportGenerator reportGenerator)
         {
             _logger = logger;
             _consoleReader = consoleReader;
             _commandParser = commandParser;
+            _reportGenerator = reportGenerator;
 
             _logger.LogDebug("Started application");
         }
@@ -46,17 +48,13 @@ namespace bsmithb2.Robot.core
                 else if (Actions.Count > 0)
                 {
                     Actions.Add(action);
+                    if (action.GetType() == typeof(ReportAction))
+                    {
+                        _reportGenerator.RunReport(Actions);
+                    }
                 }
+                
             }
-
-             //TODO - If Report action, then apply actions in order and report result
-            //TODO - Exit?
-            //TODO - A robot that is not on the table can choose to ignore the MOVE, LEFT, RIGHT and REPORT commands.
-            //     ----- This means that once you perform a move then you need to determine if we're off the table
-            //     ----- Only valid response is PLACE
-
-
-
         }
     }
 }

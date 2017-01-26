@@ -60,5 +60,18 @@ namespace bsmithb2.Robot.Tests
                 Assert.IsInstanceOf<CommandParser>(reader);
             }
         }
+
+        [Test]
+        public void Configure_ShouldResolveReportGenerator()
+        {
+            DependencyContainer dependencyContainer = new DependencyContainer();
+            var container = dependencyContainer.Configure();
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var reader = scope.Resolve<IReportGenerator>();
+                Assert.IsNotNull(reader);
+                Assert.IsInstanceOf<ReportGenerator>(reader);
+            }
+        }
     }
 }

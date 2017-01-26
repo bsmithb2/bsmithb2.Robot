@@ -20,14 +20,14 @@ namespace bsmithb2.Robot.Tests
         public void Constructor_ShouldAccept_ILogger()
         {
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, null, null);
+            var application = new Application(logger, null, null, null);
         }
 
         [Test]
         public void Constructor_ShouldLogItsInstantiation()
         {
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, null, null);
+            var application = new Application(logger, null, null, null);
 
             logger.ReceivedWithAnyArgs(1).LogDebug("");
         }
@@ -37,7 +37,7 @@ namespace bsmithb2.Robot.Tests
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
-            var application = new Application(logger, consoleReader, null);
+            var application = new Application(logger, consoleReader, null, null);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace bsmithb2.Robot.Tests
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             commandParser.ParseCommand("").ReturnsForAnyArgs(new ExitAction());
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, null);
             logger.ClearReceivedCalls();
             application.Run();
 
@@ -60,8 +60,9 @@ namespace bsmithb2.Robot.Tests
             var consoleReader = Substitute.For<IConsoleReader>();
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("").ReturnsForAnyArgs(new ExitAction());
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -76,9 +77,10 @@ namespace bsmithb2.Robot.Tests
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
             
@@ -92,10 +94,11 @@ namespace bsmithb2.Robot.Tests
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("PLACE").Returns(new PlaceAction(0,0,"NORTH"));
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -111,10 +114,11 @@ namespace bsmithb2.Robot.Tests
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("MOVE", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("MOVE").Returns(new MoveAction());
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -130,10 +134,11 @@ namespace bsmithb2.Robot.Tests
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("LEFT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("LEFT").Returns(new LeftAction());
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -149,10 +154,11 @@ namespace bsmithb2.Robot.Tests
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("RIGHT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             commandParser.ParseCommand("RIGHT").Returns(new RightAction());
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -177,10 +183,12 @@ namespace bsmithb2.Robot.Tests
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("REPORT", "EXIT"));
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+
             commandParser.ParseCommand("REPORT").Returns(new ReportAction());
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -194,6 +202,7 @@ namespace bsmithb2.Robot.Tests
         public void Run_ShouldResetListOnInputOfPLACECommandToList_IfSecond()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "PLACE", "EXIT"));
 
             var logger = Substitute.For<ILogger>();
@@ -201,7 +210,7 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("PLACE").Returns(new PlaceAction(1,1,"WEST"));
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -218,6 +227,7 @@ namespace bsmithb2.Robot.Tests
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             var expectedAction1 = new PlaceAction(1, 1, "WEST");
             var expectedAction2 = new MoveAction();
 
@@ -225,7 +235,7 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("MOVE").Returns(expectedAction2);
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -245,6 +255,7 @@ namespace bsmithb2.Robot.Tests
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             var expectedAction1 = new PlaceAction(1, 1, "WEST");
             var expectedAction2 = new RightAction();
 
@@ -252,7 +263,7 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("RIGHT").Returns(expectedAction2);
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -272,6 +283,7 @@ namespace bsmithb2.Robot.Tests
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             var expectedAction1 = new PlaceAction(1, 1, "WEST");
             var expectedAction2 = new RightAction();
 
@@ -279,7 +291,7 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("LEFT").Returns(expectedAction2);
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -299,6 +311,7 @@ namespace bsmithb2.Robot.Tests
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
             var expectedAction1 = new PlaceAction(1, 1, "WEST");
             var expectedAction2 = new RightAction();
 
@@ -306,7 +319,7 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("REPORT").Returns(expectedAction2);
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
@@ -319,25 +332,50 @@ namespace bsmithb2.Robot.Tests
         }
 
         [Test]
-        public void Run_ShouldNotRunReport_IfSecond()
+        public void Run_ShouldNotRunReport_IfFirst()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("REPORT", "EXIT"));
 
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+
             var expectedAction1 = new ReportAction();
 
             commandParser.ParseCommand("REPORT").Returns(expectedAction1);
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
-            var application = new Application(logger, consoleReader, commandParser);
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
 
             application.Run();
 
             commandParser.Received(1).ParseCommand("REPORT");
-            Assert.IsNotNull(application.Actions);
-            Assert.AreEqual(0, application.Actions.Count);
+            reportGenerator.ReceivedWithAnyArgs(0).RunReport(null);
+        }
+
+        [Test]
+        public void Run_ShouldRunReport_IfSecond()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "REPORT", "EXIT"));
+
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+
+            var expectedAction1 = new ReportAction();
+
+            commandParser.ParseCommand("PLACE").Returns(new PlaceAction(1,1, "WEST"));
+            commandParser.ParseCommand("REPORT").Returns(expectedAction1);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
+
+            application.Run();
+
+            reportGenerator.ReceivedWithAnyArgs(1).RunReport(null);
+
         }
     }
 }

@@ -19,7 +19,9 @@ namespace bsmithb2.Robot.core
             builder.RegisterType<ConsoleReader>().As<IConsoleReader>();
 
             builder.RegisterType<CommandParser>().As<ICommandParser>();
+            builder.RegisterType<ReportGenerator>().As<IReportGenerator>();
             builder.RegisterType<Application>().As<IApplication>();
+            
             return builder.Build();
         }
     }
