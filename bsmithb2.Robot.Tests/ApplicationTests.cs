@@ -70,6 +70,24 @@ namespace bsmithb2.Robot.Tests
         }
 
         [Test]
+        public void Run_ShouldIgnoreInvalidActions()
+        {
+            var consoleReader = Substitute.For<IConsoleReader>();
+            var logger = Substitute.For<ILogger>();
+            var commandParser = Substitute.For<ICommandParser>();
+            var reportGenerator = Substitute.For<IReportGenerator>();
+            consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("MOEV", "EXIT"));
+            commandParser.ParseCommand("MOEV").Returns((IAction)null);
+            commandParser.ParseCommand("EXIT").Returns(new ExitAction());
+            
+            var application = new Application(logger, consoleReader, commandParser, reportGenerator);
+
+            application.Run();
+
+            consoleReader.Received(2).ReadLine();
+        }
+
+        [Test]
         public void Run_ShouldPassInputToCommandParser()
         {
             var consoleReader = Substitute.For<IConsoleReader>();

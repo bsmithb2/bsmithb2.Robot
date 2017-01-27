@@ -36,6 +36,10 @@ namespace bsmithb2.Robot.core
             {
                 var instruction = _consoleReader.ReadLine();
                 var action = _commandParser.ParseCommand(instruction);
+                if (action == null)
+                {
+                    continue;
+                }
                 if (action.GetType() == typeof(ExitAction))
                 {
                     break;
