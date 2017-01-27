@@ -43,18 +43,18 @@ namespace bsmithb2.Robot.Tests
         }
 
         /// <summary>
-        /// PLACE 4,0,EAST
+        /// PLACE 0,0,EAST
         /// MOVE
         /// REPORT
-        /// Output: 3,0,EAST
+        /// Output: 1,0,EAST
         /// </summary>
         [Test]
         public void CalculatePosition_PlaceInCornerMove_ValidEast()
         {
             var positionCalculator = new PositionCalculator();
-            var actions = new List<IAction> { new PlaceAction(4, 0, "EAST"), new MoveAction(), new ReportAction() };
+            var actions = new List<IAction> { new PlaceAction(0, 0, "EAST"), new MoveAction(), new ReportAction() };
             var actualPosition = positionCalculator.CalculatePosition(actions);
-            var expectedPosition = new Position(3, 0, Direction.EAST);
+            var expectedPosition = new Position(1, 0, Direction.EAST);
 
             Assert.AreEqual(expectedPosition.X, actualPosition.X);
             Assert.AreEqual(expectedPosition.Y, actualPosition.Y);
@@ -62,18 +62,18 @@ namespace bsmithb2.Robot.Tests
         }
 
         /// <summary>
-        /// PLACE 0,0,WEST
+        /// PLACE 4,4,WEST
         /// MOVE
         /// REPORT
-        /// Output: 1,0,WEST
+        /// Output: 3,4,WEST
         /// </summary>
         [Test]
         public void CalculatePosition_PlaceInCornerMove_ValidWest()
         {
             var positionCalculator = new PositionCalculator();
-            var actions = new List<IAction> { new PlaceAction(0, 0, "WEST"), new MoveAction(), new ReportAction() };
+            var actions = new List<IAction> { new PlaceAction(4, 4, "WEST"), new MoveAction(), new ReportAction() };
             var actualPosition = positionCalculator.CalculatePosition(actions);
-            var expectedPosition = new Position(1, 0, Direction.WEST);
+            var expectedPosition = new Position(3, 4, Direction.WEST);
 
             Assert.AreEqual(expectedPosition.X, actualPosition.X);
             Assert.AreEqual(expectedPosition.Y, actualPosition.Y);
@@ -300,6 +300,102 @@ namespace bsmithb2.Robot.Tests
             var actualPosition = positionCalculator.CalculatePosition(actions);
 
             Assert.IsNull(actualPosition);
+        }
+
+        /// <summary>
+        /// PLACE 4,4,EAST
+        /// MOVE
+        /// REPORT
+        /// Output: {null}
+        /// </summary>
+        [Test]
+        public void CalculatePosition_PlaceAndMoveInInvalidPositionEast_ReturnNull()
+        {
+            var positionCalculator = new PositionCalculator();
+            var actions = new List<IAction> { new PlaceAction(4, 4, "EAST"), new MoveAction(), new ReportAction() };
+            var actualPosition = positionCalculator.CalculatePosition(actions);
+
+            Assert.IsNull(actualPosition);
+        }
+
+        /// <summary>
+        /// PLACE 4,4,NORTH
+        /// MOVE
+        /// REPORT
+        /// Output: {null}
+        /// </summary>
+        [Test]
+        public void CalculatePosition_PlaceAndMoveInInvalidPositionNorth_ReturnNull()
+        {
+            var positionCalculator = new PositionCalculator();
+            var actions = new List<IAction> { new PlaceAction(4, 4, "NORTH"), new MoveAction(), new ReportAction() };
+            var actualPosition = positionCalculator.CalculatePosition(actions);
+
+            Assert.IsNull(actualPosition);
+        }
+
+        /// <summary>
+        /// PLACE 0,0,WEST
+        /// MOVE
+        /// REPORT
+        /// Output: {null}
+        /// </summary>
+        [Test]
+        public void CalculatePosition_PlaceAndMoveInInvalidPositionWEST_ReturnNull()
+        {
+            var positionCalculator = new PositionCalculator();
+            var actions = new List<IAction> { new PlaceAction(0, 0, "WEST"), new MoveAction(), new ReportAction() };
+            var actualPosition = positionCalculator.CalculatePosition(actions);
+
+            Assert.IsNull(actualPosition);
+        }
+
+        /// <summary>
+        /// PLACE 0,0,NORTH
+        /// LEFT
+        /// REPORT
+        /// Output: 0,0,WEST
+        /// </summary>
+        [Test]
+        public void CalculatePosition_North_ThenLeft_ReturnsPosition()
+        {
+            var positionCalculator = new PositionCalculator();
+            var actions = new List<IAction> { new PlaceAction(0, 0, "NORTH"), new LeftAction(), new ReportAction() };
+            var actualPosition = positionCalculator.CalculatePosition(actions);
+
+            var expectedPosition = new Position(0, 0, Direction.WEST);
+
+            Assert.AreEqual(expectedPosition.X, actualPosition.X);
+            Assert.AreEqual(expectedPosition.Y, actualPosition.Y);
+            Assert.AreEqual(expectedPosition.Direction, actualPosition.Direction);
+        }
+
+        /// <summary>
+        /// PLACE 1,2,EAST
+        /// MOVE
+        /// MOVE
+        /// LEFT
+        /// MOVE
+        /// REPORT
+        /// Output: 3,3,NORTH
+        /// </summary>
+        [Test]
+        public void CalculatePosition_East_ThenComplex_ReturnsPosition()
+        {
+            var positionCalculator = new PositionCalculator();
+            var actions = new List<IAction> { new PlaceAction(1, 2, "EAST"),
+                new MoveAction(),
+                new MoveAction(),
+                new LeftAction(),
+                new MoveAction(),
+                new ReportAction() };
+            var actualPosition = positionCalculator.CalculatePosition(actions);
+
+            var expectedPosition = new Position(3, 3, Direction.NORTH);
+
+            Assert.AreEqual(expectedPosition.X, actualPosition.X);
+            Assert.AreEqual(expectedPosition.Y, actualPosition.Y);
+            Assert.AreEqual(expectedPosition.Direction, actualPosition.Direction);
         }
     }
 }

@@ -38,5 +38,18 @@ namespace bsmithb2.Robot.Tests
 
             Assert.AreEqual("0,1,NORTH", result);
         }
+
+        [Test]
+        public void RunReport_ShouldTakeNullPositionFromCalculatorAndError()
+        {
+            var positionCalculator = Substitute.For<IPositionCalculator>();
+            positionCalculator.CalculatePosition(null).ReturnsForAnyArgs((Position)null);
+            var reportGenerator = new ReportGenerator(positionCalculator);
+
+            var actions = new List<IAction> { };
+            var result = reportGenerator.RunReport(actions);
+
+            Assert.AreEqual(string.Empty, result);
+        }
     }
 }

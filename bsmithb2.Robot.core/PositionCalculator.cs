@@ -28,17 +28,17 @@ namespace bsmithb2.Robot.core
                         }
                         if (position.Direction == Direction.EAST)
                         {
-                            position = new Position(position.X - 1, position.Y, position.Direction);
+                            position = new Position(position.X + 1, position.Y, position.Direction);
                         }
                         if (position.Direction == Direction.WEST)
                         {
-                            position = new Position(position.X + 1, position.Y, position.Direction);
+                            position = new Position(position.X - 1, position.Y, position.Direction);
                         }
                         if (position.Direction == Direction.SOUTH)
                         {
                             position = new Position(position.X, position.Y - 1, position.Direction);
                         }
-                        if(position.X < 0 || position.Y < 0)
+                        if(position.X < 0 || position.Y < 0 || position.X > 4 || position.Y > 4)
                         {
                             position = null;
                         }
