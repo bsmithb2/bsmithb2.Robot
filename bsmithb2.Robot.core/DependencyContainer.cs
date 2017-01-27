@@ -9,10 +9,10 @@ namespace bsmithb2.Robot.core
         public IContainer Configure()
         {
             var builder = new ContainerBuilder();
-            
-            ILoggerFactory loggerFactory = new LoggerFactory()    
-                .AddConsole()
-                .AddDebug();
+
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddProvider(new CustomConsoleLoggerProvider());
+                
             ILogger logger = loggerFactory.CreateLogger<Program>();
             builder.RegisterInstance(logger);
 
