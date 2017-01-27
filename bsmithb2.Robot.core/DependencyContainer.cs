@@ -17,9 +17,9 @@ namespace bsmithb2.Robot.core
             builder.RegisterInstance(logger);
 
             builder.RegisterType<ConsoleReader>().As<IConsoleReader>();
-
             builder.RegisterType<CommandParser>().As<ICommandParser>();
             builder.RegisterType<ReportGenerator>().As<IReportGenerator>();
+            builder.RegisterType<PositionCalculator>().As<IPositionCalculator>();
             builder.RegisterType<Application>().As<IApplication>();
             
             return builder.Build();
