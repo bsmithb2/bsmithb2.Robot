@@ -54,7 +54,7 @@ namespace bsmithb2.Robot.core
                     Actions.Add(action);
                     if (action.GetType() == typeof(ReportAction))
                     {
-                        _reportGenerator.RunReport(Actions);
+                        _logger.LogInformation(_reportGenerator.RunReport(Actions));
                     }
                 }
             }

@@ -373,7 +373,7 @@ namespace bsmithb2.Robot.Tests
         }
 
         [Test]
-        public void Run_ShouldRunReport_IfSecond()
+        public void Run_ShouldRunReport_IfSecond_AndLogOutput()
         {
             var consoleReader = Substitute.For<IConsoleReader>();
             consoleReader.ReadLine().Returns(i => BuildListOfItemsInOrder("PLACE", "REPORT", "EXIT"));
@@ -381,6 +381,7 @@ namespace bsmithb2.Robot.Tests
             var logger = Substitute.For<ILogger>();
             var commandParser = Substitute.For<ICommandParser>();
             var reportGenerator = Substitute.For<IReportGenerator>();
+            reportGenerator.RunReport(null).ReturnsForAnyArgs("TestOutput");
 
             var expectedAction1 = new ReportAction();
 
@@ -389,11 +390,11 @@ namespace bsmithb2.Robot.Tests
             commandParser.ParseCommand("EXIT").Returns(new ExitAction());
 
             var application = new Application(logger, consoleReader, commandParser, reportGenerator);
-
+            logger.ClearReceivedCalls();
             application.Run();
 
             reportGenerator.ReceivedWithAnyArgs(1).RunReport(null);
-
+            logger.ReceivedWithAnyArgs(2).LogInformation("");
         }
     }
 }
